@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Ptncafe.ES7;
+using Ptncafe.ES7.Model;
 
 namespace Ptncafe.Api.ES7.Test
 {
@@ -25,7 +26,15 @@ namespace Ptncafe.Api.ES7.Test
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.ElasticSearchDependencyRegister(Configuration);
+
+            var kafkaConfiguration = Configuration.GetSection(nameof(ElasticSearchConfiguration))
+                  .Get<ElasticSearchConfiguration>();
+            var settings = new Nest.ConnectionSettings(new Uri(kafkaConfiguration.Url))
+             .DefaultIndex(kafkaConfiguration.DefaultIndex);
+
+            var esClient = services.ElasticSearchDependencyRegister(settings);
+            esClient.Indices.Create("testindex", c => c.Map<Model.TestModel>(m => m.AutoMap()));
+
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -40,5 +49,6 @@ namespace Ptncafe.Api.ES7.Test
 
             app.UseMvc();
         }
+
     }
 }

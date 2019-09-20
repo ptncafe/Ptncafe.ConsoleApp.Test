@@ -26,27 +26,30 @@ namespace Ptncafe.Api.ES7.Test.Controllers
             var data = await _elasticClient.GetAsync<TestModel>(id, idx => idx.Index("testindex"), cancellationToken);
             _logger.LogDebug("Get {0}", ObjectDumper.Dump(data));
             if (data.IsValid)
-                return Ok(data);
+                return Ok(data.Source);
 
-            return StatusCode(500, data.DebugInformation);
+            return StatusCode(500, data.ServerError.Error.Reason);
         }
 
         [Route("{id}")]
         [HttpPost]
         public async Task<ActionResult> Post([FromRoute] int id, System.Threading.CancellationToken cancellationToken)
         {
-            TestModel testModel = new TestModel {
+            TestModel testModel = new TestModel
+            {
                 Id = 1,
                 IntValue = 1,
                 Name = "name test",
                 StringValue = "String Value StringValue"
             };
-            var data = await _elasticClient.IndexAsync(testModel, cancellationToken);
+            //_elasticClient.CreateIndex();
+
+            var data = await _elasticClient.IndexDocumentAsync(testModel, cancellationToken);
             _logger.LogDebug("Get {0}", ObjectDumper.Dump(data));
             if (data.IsValid)
                 return Ok(data);
 
-            return StatusCode(500, data.DebugInformation);
+            return StatusCode(500, data.ServerError.Error.Reason);
         }
 
     }
