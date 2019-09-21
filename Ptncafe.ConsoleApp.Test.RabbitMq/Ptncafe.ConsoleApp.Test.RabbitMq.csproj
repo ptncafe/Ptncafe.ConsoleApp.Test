@@ -2,11 +2,13 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <LangVersion>latest</LangVersion>
     <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="EasyNetQ" Version="3.6.0" />
+    <PackageReference Include="EasyNetQ.DI.Microsoft" Version="3.6.0" />
+    <PackageReference Include="ObjectDumper.NET" Version="2.4.19218.1" />
     <PackageReference Include="ReadLine" Version="2.0.1" />
   </ItemGroup>
 
