@@ -1,15 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29306.81
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ptncafe.ConsoleApp.Test.ES7", "Ptncafe.ConsoleApp.Test.ES7\Ptncafe.ConsoleApp.Test.ES7.csproj", "{1131FDCC-FAE1-48EF-8A8B-7E2D6BC965F2}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ptncafe.ES7", "Ptncafe.ES7\Ptncafe.ES7.csproj", "{6144FDBC-AA73-44F9-84DE-08C332D44C5D}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ptncafe.Api.ES7.Test", "Ptncafe.Api.ES7.Test\Ptncafe.Api.ES7.Test.csproj", "{1F0E044B-0810-4681-9588-D12C7F47F8AD}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ptncafe.ConsoleApp.Test.RabbitMq", "Ptncafe.ConsoleApp.Test.RabbitMq\Ptncafe.ConsoleApp.Test.RabbitMq.csproj", "{48CC8041-74A4-4123-BD7B-1645FBA1B619}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ptncafe.ConsoleApp.Test.MassTransit", "Ptncafe.ConsoleApp.Test.MassTransit\Ptncafe.ConsoleApp.Test.MassTransit.csproj", "{9D5CA647-33CF-46D4-BE0F-8BC7BA35D654}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,27 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1131FDCC-FAE1-48EF-8A8B-7E2D6BC965F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1131FDCC-FAE1-48EF-8A8B-7E2D6BC965F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1131FDCC-FAE1-48EF-8A8B-7E2D6BC965F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1131FDCC-FAE1-48EF-8A8B-7E2D6BC965F2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6144FDBC-AA73-44F9-84DE-08C332D44C5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6144FDBC-AA73-44F9-84DE-08C332D44C5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6144FDBC-AA73-44F9-84DE-08C332D44C5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6144FDBC-AA73-44F9-84DE-08C332D44C5D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1F0E044B-0810-4681-9588-D12C7F47F8AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1F0E044B-0810-4681-9588-D12C7F47F8AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1F0E044B-0810-4681-9588-D12C7F47F8AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1F0E044B-0810-4681-9588-D12C7F47F8AD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{48CC8041-74A4-4123-BD7B-1645FBA1B619}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{48CC8041-74A4-4123-BD7B-1645FBA1B619}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{48CC8041-74A4-4123-BD7B-1645FBA1B619}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{48CC8041-74A4-4123-BD7B-1645FBA1B619}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D5CA647-33CF-46D4-BE0F-8BC7BA35D654}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D5CA647-33CF-46D4-BE0F-8BC7BA35D654}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D5CA647-33CF-46D4-BE0F-8BC7BA35D654}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D5CA647-33CF-46D4-BE0F-8BC7BA35D654}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {198C4003-4EB7-4501-84E5-01C69338F7DA}
+		SolutionGuid = {F5E9E35E-E576-40BB-A84F-A4BE4E5CAC9F}
 	EndGlobalSection
 EndGlobal
