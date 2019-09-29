@@ -4,11 +4,10 @@ using System.Text;
 
 namespace Ptncafe.ConsoleApp.Test.RabbitMq.Model
 {
-    public class TextMessage
+    public class MesssageDto
     {
-        public int Index { get; set; }
-        public System.DateTime CreatedDate { get; set; }
         public string Message { get; set; }
+        public DateTime CreatedDate { get; set; }
 
     }
 }
