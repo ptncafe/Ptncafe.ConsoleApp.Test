@@ -14,7 +14,8 @@ namespace Ptncafe.ConsoleApp.Test.RabbitMq
 
         private static async Task Main(string[] args)
         {
-            string input = ReadLine.Read("Pls Input how many message u want.");
+            Console.WriteLine("Pls Input how many message u want.");
+            string input = Console.ReadLine();
             if (string.IsNullOrEmpty(input))
             {
                 Console.WriteLine("Ur input is invalid");
@@ -44,7 +45,7 @@ namespace Ptncafe.ConsoleApp.Test.RabbitMq
                                          routingKey: Constant.TopicRoutingKey,
                                          basicProperties: null,
                                          body: body);
-                    Console.WriteLine(" [x] Sent {0}", JsonSerializer.Serialize(messsage));
+                    Console.WriteLine($"BasicPublish {DateTime.Now} => {_topicExchangeName} {Constant.TopicRoutingKey} {0}", JsonSerializer.Serialize(messsage));
                 }
               
             }
