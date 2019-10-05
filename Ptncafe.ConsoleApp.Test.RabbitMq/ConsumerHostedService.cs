@@ -42,13 +42,14 @@ namespace Ptncafe.ConsoleApp.Test.RabbitMq
             await InitRabbitMQ();
             await ConsumerAsync<MesssageDto>(queueName: "demo.test.topic.queue"
                 , exchangeName: _topicExchangeName
-                , routingKey: "demo.test.topic.*"
+                , routingKey: Constant.TopicRoutingKey
                 , prefetchCount: 1
-                , async (message) =>
-            {
-                await Task.Delay(1000);
-                _logger.LogDebug($"demo.test.topic.queue {message} ");
-            }, cancellationToken);
+                , (message) =>
+           {
+               Thread.Sleep(1000);
+               //throw new Exception($"Error {DateTime.Now}  Exception demo.test.topic.queue {message.Message}  {message.CreatedDate}");
+               Console.WriteLine($"demo.test.topic.queue {DateTime.Now} => {message.Message}  {message.CreatedDate}");
+           }, cancellationToken);
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
@@ -76,10 +77,8 @@ namespace Ptncafe.ConsoleApp.Test.RabbitMq
             // create channel
             _channelFactory = _connection.CreateModel();
 
-
             _channelFactory.ExchangeDeclare(_topicExchangeName, ExchangeType.Topic);//"demo.test.topic.exchange"
             _logger.LogInformation($"InitRabbitMQ ExchangeDeclare {_topicExchangeName} done");
-
 
             _channelFactory.BasicQos(0, 10, true);
             _channels = new List<IModel>();
@@ -99,22 +98,22 @@ namespace Ptncafe.ConsoleApp.Test.RabbitMq
             channel.QueueBind(queueName, exchangeName, routingKey, null);
             cancellationToken.ThrowIfCancellationRequested();
             var consumer = new EventingBasicConsumer(channel);
-            consumer.Received += async (model, basicDeliverEventArgs) =>
-            {
-                var body = basicDeliverEventArgs.Body;
-                var message = Encoding.UTF8.GetString(body);
-                var data = JsonSerializer.Deserialize<T>(body);
-                try
-                {
-                    action(data);
-                    channel.BasicAck(basicDeliverEventArgs.DeliveryTag, false);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogDebug($"Process Error => {message} {DateTime.Now} {ex}");
-                    channel.BasicNack(basicDeliverEventArgs.DeliveryTag, false, false);
-                }
-            };
+            consumer.Received += (model, basicDeliverEventArgs) =>
+           {
+               try
+               {
+                   var body = basicDeliverEventArgs.Body;
+                   var message = Encoding.UTF8.GetString(body);
+                   var data = JsonSerializer.Deserialize<T>(body);
+                   action(data);
+                   channel.BasicAck(basicDeliverEventArgs.DeliveryTag, false);
+               }
+               catch (Exception ex)
+               {
+                   _logger.LogError($"Process Error {DateTime.Now} => {basicDeliverEventArgs.Body} {DateTime.Now} {ex}");
+                   channel.BasicReject(basicDeliverEventArgs.DeliveryTag,  true);
+               }
+           };
             channel.BasicQos(0, prefetchCount, false);
             channel.BasicConsume(queue: queueName, consumer: consumer);
             _channels.Add(channel);

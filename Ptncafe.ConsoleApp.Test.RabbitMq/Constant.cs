@@ -8,6 +8,7 @@ namespace Ptncafe.ConsoleApp.Test.RabbitMq
     {
         public static readonly string RabbitMqConnectionString = "amqp://unnshbpd:U3dN66ZQ8GY0muSa3HWp9XRR1keAVI4x@reindeer.rmq.cloudamqp.com/unnshbpd";
         public static readonly string TopicExchangeName = "demo.test.topic.exchange";
+        public static readonly string TopicRoutingKey = "demo.test.topic.*";
 
     }
 }
