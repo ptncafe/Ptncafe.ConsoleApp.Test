@@ -19,7 +19,6 @@ namespace Ptncafe.ConsoleApp.Test.RabbitMq
         #region config
 
         private readonly string _rabbitMqConnectionString = Constant.RabbitMqConnectionString;
-        private readonly string _topicExchangeName = Constant.TopicExchangeName;//"demo.test.topic.exchange"
 
         #endregion config
 
@@ -39,17 +38,20 @@ namespace Ptncafe.ConsoleApp.Test.RabbitMq
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation($"{nameof(ConsumerHostedService)} StartAsync");
+
             await InitRabbitMQ();
-            await ConsumerAsync<MesssageDto>(queueName: "demo.test.topic.queue"
-                , exchangeName: _topicExchangeName
-                , routingKey: Constant.TopicRoutingKey
+
+            await ConsumerAsync<MesssageDto>(queueName: "demo.test.topic.queue.noti"
+                , exchangeName: Constant.TopicExchangeName
+                , routingKey: Constant.Topic_Noti_RoutingKey//"demo.test.topic.*.noti"
                 , prefetchCount: 1
                 , (message) =>
            {
                Thread.Sleep(1000);
-               //throw new Exception($"Error {DateTime.Now}  Exception demo.test.topic.queue {message.Message}  {message.CreatedDate}");
-               Console.WriteLine($"demo.test.topic.queue {DateTime.Now} => {message.Message}  {message.CreatedDate}");
+               //throw new Exception($"demo.test.topic.queue.noti_web Error {DateTime.Now}  Exception  {message.Message}  {message.CreatedDate}");
+               Console.WriteLine($"demo.test.topic.queue.noti_web {DateTime.Now} => {message.Message}  {message.CreatedDate}");
            }, cancellationToken);
+
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
@@ -64,6 +66,10 @@ namespace Ptncafe.ConsoleApp.Test.RabbitMq
             return Task.CompletedTask;
         }
 
+        /// <summary>
+        /// https://www.cloudamqp.com/blog/2015-09-03-part4-rabbitmq-for-beginners-exchanges-routing-keys-bindings.html
+        /// </summary>
+        /// <returns></returns>
         private Task InitRabbitMQ()
         {
             var connectionFactory = new ConnectionFactory()
@@ -77,8 +83,12 @@ namespace Ptncafe.ConsoleApp.Test.RabbitMq
             // create channel
             _channelFactory = _connection.CreateModel();
 
-            _channelFactory.ExchangeDeclare(_topicExchangeName, ExchangeType.Topic);//"demo.test.topic.exchange"
-            _logger.LogInformation($"InitRabbitMQ ExchangeDeclare {_topicExchangeName} done");
+            _channelFactory.ExchangeDeclare(Constant.TopicExchangeName, ExchangeType.Topic);//"demo.test.topic.exchange"
+            _channelFactory.ExchangeDeclare(Constant.FanoutExchangeName, ExchangeType.Fanout);//"demo.test.topic.fanout"
+            _channelFactory.ExchangeDeclare(Constant.DirectExchangeName, ExchangeType.Direct);//"demo.test.topic.direct"
+
+
+            _logger.LogInformation($"InitRabbitMQ ExchangeDeclare done");
 
             _channelFactory.BasicQos(0, 10, true);
             _channels = new List<IModel>();
