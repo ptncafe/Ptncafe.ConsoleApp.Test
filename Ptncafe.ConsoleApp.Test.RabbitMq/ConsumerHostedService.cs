@@ -41,16 +41,28 @@ namespace Ptncafe.ConsoleApp.Test.RabbitMq
 
             await InitRabbitMQ();
 
-            await ConsumerAsync<MesssageDto>(queueName: "demo.test.topic.queue.noti"
+            await ConsumerAsync<MesssageDto>(queueName: "demo.test.topic.queue.noti.web"
                 , exchangeName: Constant.TopicExchangeName
-                , routingKey: Constant.Topic_Noti_RoutingKey//"demo.test.topic.*.noti"
+                , routingKey: Constant.Topic_Noti_Queue_RoutingKey//"demo.test.topic.*.noti"
                 , prefetchCount: 1
                 , (message) =>
            {
                Thread.Sleep(1000);
                //throw new Exception($"demo.test.topic.queue.noti_web Error {DateTime.Now}  Exception  {message.Message}  {message.CreatedDate}");
-               Console.WriteLine($"demo.test.topic.queue.noti_web {DateTime.Now} => {message.Message}  {message.CreatedDate}");
+               Console.WriteLine($"{Constant.Topic_Noti_Queue_RoutingKey} {DateTime.Now} => {message.Message}  {message.CreatedDate}");
            }, cancellationToken);
+
+
+            await ConsumerAsync<MesssageDto>(queueName: "demo.test.topic.queue.noti.mobile"
+               , exchangeName: Constant.TopicExchangeName
+               , routingKey: Constant.Topic_Noti_Queue_RoutingKey//"demo.test.topic.*.noti"
+               , prefetchCount: 1
+               , (message) =>
+               {
+                   Thread.Sleep(1000);
+                    //throw new Exception($"demo.test.topic.queue.noti_web Error {DateTime.Now}  Exception  {message.Message}  {message.CreatedDate}");
+                    Console.WriteLine($"{Constant.Topic_Noti_Queue_RoutingKey} {DateTime.Now} => {message.Message}  {message.CreatedDate}");
+               }, cancellationToken);
 
         }
 

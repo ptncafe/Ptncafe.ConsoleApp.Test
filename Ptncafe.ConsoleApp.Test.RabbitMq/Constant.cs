@@ -8,10 +8,10 @@
         public static readonly string FanoutExchangeName = "demo.test.fanout";
         public static readonly string DirectExchangeName = "demo.test.direct";
 
-        public static readonly string Topic_Order_Noti_Publish_RoutingKey = "demo.test.topic.order.noti";
-        public static readonly string Topic_Product_Noti_Publish_RoutingKey = "demo.test.topic.product.noti";
+        public static readonly string Topic_Noti_Order_Publish_RoutingKey = "demo.test.topic.order.noti";
+        public static readonly string Topic_Noti_Product_Publish_RoutingKey = "demo.test.topic.product.noti";
 
-        public static readonly string Topic_Noti_RoutingKey = "demo.test.topic.*.noti";
-        //public static readonly string Topic_Noti_Mobile_RoutingKey = "demo.test.topic.*.noti";
+
+        public static readonly string Topic_Noti_Queue_RoutingKey = "demo.test.topic.*.noti";
     }
 }

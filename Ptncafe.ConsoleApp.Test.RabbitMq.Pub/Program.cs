@@ -54,23 +54,25 @@ namespace Ptncafe.ConsoleApp.Test.RabbitMq
             {
                 for (int i = 0; i < messagesLength; i++)
                 {
+                    var randomString = RandomString(8);
                     channel.BasicPublish(exchange: Constant.TopicExchangeName,
-                                         routingKey: Constant.Topic_Order_Noti_Publish_RoutingKey,
+                                         routingKey: Constant.Topic_Noti_Order_Publish_RoutingKey,
                                          basicProperties: null,
                                          body: Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new MesssageDto
                                          {
                                              CreatedDate = DateTime.Now,
-                                             Message = $"Message test {Constant.Topic_Order_Noti_Publish_RoutingKey} {RandomString(8)} {DateTime.Now}"
+                                             Message = $"Message test {Constant.Topic_Noti_Order_Publish_RoutingKey} {randomString} {DateTime.Now}"
                                          })));
 
                     channel.BasicPublish(exchange: Constant.TopicExchangeName,
-                                        routingKey: Constant.Topic_Product_Noti_Publish_RoutingKey,
-                                        basicProperties: null,
-                                        body: Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new MesssageDto
-                                        {
-                                            CreatedDate = DateTime.Now,
-                                            Message = $"Message test {Constant.Topic_Product_Noti_Publish_RoutingKey} {RandomString(8)} {DateTime.Now}"
-                                        })));
+                                           routingKey: Constant.Topic_Noti_Product_Publish_RoutingKey,
+                                           basicProperties: null,
+                                           body: Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new MesssageDto
+                                           {
+                                               CreatedDate = DateTime.Now,
+                                               Message = $"Message test {Constant.Topic_Noti_Product_Publish_RoutingKey} {randomString} {DateTime.Now}"
+                                           })));
+
 
                     Console.WriteLine($"BasicPublish {DateTime.Now} => {Constant.TopicExchangeName}  {0}", i);
                 }
