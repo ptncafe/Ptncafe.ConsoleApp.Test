@@ -41,29 +41,8 @@ namespace Ptncafe.ConsoleApp.Test.RabbitMq
 
             await InitRabbitMQ();
 
-            await ConsumerAsync<MesssageDto>(queueName: "demo.test.topic.queue.noti.web"
-                , exchangeName: Constant.TopicExchangeName
-                , routingKey: Constant.Topic_Noti_Queue_RoutingKey//"demo.test.topic.*.noti"
-                , prefetchCount: 1
-                , (message) =>
-           {
-               Thread.Sleep(1000);
-               //throw new Exception($"demo.test.topic.queue.noti_web Error {DateTime.Now}  Exception  {message.Message}  {message.CreatedDate}");
-               Console.WriteLine($"{Constant.Topic_Noti_Queue_RoutingKey} {DateTime.Now} => {message.Message}  {message.CreatedDate}");
-           }, cancellationToken);
-
-
-            await ConsumerAsync<MesssageDto>(queueName: "demo.test.topic.queue.noti.mobile"
-               , exchangeName: Constant.TopicExchangeName
-               , routingKey: Constant.Topic_Noti_Queue_RoutingKey//"demo.test.topic.*.noti"
-               , prefetchCount: 1
-               , (message) =>
-               {
-                   Thread.Sleep(1000);
-                    //throw new Exception($"demo.test.topic.queue.noti_web Error {DateTime.Now}  Exception  {message.Message}  {message.CreatedDate}");
-                    Console.WriteLine($"{Constant.Topic_Noti_Queue_RoutingKey} {DateTime.Now} => {message.Message}  {message.CreatedDate}");
-               }, cancellationToken);
-
+            await TopicQueue(cancellationToken);
+            await FanoutQueue(cancellationToken);
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
@@ -99,12 +78,85 @@ namespace Ptncafe.ConsoleApp.Test.RabbitMq
             _channelFactory.ExchangeDeclare(Constant.FanoutExchangeName, ExchangeType.Fanout);//"demo.test.topic.fanout"
             _channelFactory.ExchangeDeclare(Constant.DirectExchangeName, ExchangeType.Direct);//"demo.test.topic.direct"
 
-
             _logger.LogInformation($"InitRabbitMQ ExchangeDeclare done");
 
             _channelFactory.BasicQos(0, 10, true);
             _channels = new List<IModel>();
             return Task.CompletedTask;
+        }
+
+        private async Task TopicQueue(CancellationToken cancellationToken)
+        {
+            await ConsumerAsync<MesssageDto>(queueName: "demo.test.topic.queue.noti.web"
+               , exchangeName: Constant.TopicExchangeName
+               , routingKey: Constant.Topic_Noti_Queue_RoutingKey//"demo.test.topic.*.noti"
+               , prefetchCount: 1
+               , (message) =>
+               {
+                   Thread.Sleep(2000);
+                   //throw new Exception($"demo.test.topic.queue.noti_web Error {DateTime.Now}  Exception  {message.Message}  {message.CreatedDate}");
+                   Console.WriteLine($"web {Constant.Topic_Noti_Queue_RoutingKey} {DateTime.Now} => {message.Message}  {message.CreatedDate}");
+               }, cancellationToken);
+
+            await ConsumerAsync<MesssageDto>(queueName: "demo.test.topic.queue.noti.mobile"
+               , exchangeName: Constant.TopicExchangeName
+               , routingKey: Constant.Topic_Noti_Queue_RoutingKey//"demo.test.topic.*.noti"
+               , prefetchCount: 1
+               , (message) =>
+               {
+                   Thread.Sleep(1000);
+                   //throw new Exception($"demo.test.topic.queue.noti_web Error {DateTime.Now}  Exception  {message.Message}  {message.CreatedDate}");
+                   Console.WriteLine($"mobile {Constant.Topic_Noti_Queue_RoutingKey} {DateTime.Now} => {message.Message}  {message.CreatedDate}");
+               }, cancellationToken);
+        }
+
+        private async Task FanoutQueue(CancellationToken cancellationToken)
+        {
+            await ConsumerAsync<MesssageDto>(queueName: "demo.test.fanout.queue.noti.web"
+               , exchangeName: Constant.FanoutExchangeName
+               , routingKey: string.Empty
+               , prefetchCount: 1
+               , (message) =>
+               {
+                   Thread.Sleep(2000);
+                   //throw new Exception($"demo.test.topic.queue.noti_web Error {DateTime.Now}  Exception  {message.Message}  {message.CreatedDate}");
+                   Console.WriteLine($"web {Constant.FanoutExchangeName} {DateTime.Now} => {message.Message}  {message.CreatedDate}");
+               }, cancellationToken);
+
+            await ConsumerAsync<MesssageDto>(queueName: "demo.test.fanout.queue.noti.mobile"
+               , exchangeName: Constant.FanoutExchangeName
+               , routingKey: string.Empty
+               , prefetchCount: 1
+               , (message) =>
+               {
+                   Thread.Sleep(1000);
+                   //throw new Exception($"demo.test.topic.queue.noti_web Error {DateTime.Now}  Exception  {message.Message}  {message.CreatedDate}");
+                   Console.WriteLine($"mobile {Constant.FanoutExchangeName} {DateTime.Now} => {message.Message}  {message.CreatedDate}");
+               }, cancellationToken);
+        }
+        private async Task DirectQueue(CancellationToken cancellationToken)
+        {
+            await ConsumerAsync<MesssageDto>(queueName: "demo.test.fanout.queue.noti.web"
+               , exchangeName: Constant.DirectExchangeName
+               , routingKey: string.Empty
+               , prefetchCount: 1
+               , (message) =>
+               {
+                   Thread.Sleep(2000);
+                   //throw new Exception($"demo.test.topic.queue.noti_web Error {DateTime.Now}  Exception  {message.Message}  {message.CreatedDate}");
+                   Console.WriteLine($"web {Constant.FanoutExchangeName} {DateTime.Now} => {message.Message}  {message.CreatedDate}");
+               }, cancellationToken);
+
+            await ConsumerAsync<MesssageDto>(queueName: "demo.test.fanout.queue.noti.mobile"
+               , exchangeName: Constant.DirectExchangeName
+               , routingKey: string.Empty
+               , prefetchCount: 1
+               , (message) =>
+               {
+                   Thread.Sleep(1000);
+                   //throw new Exception($"demo.test.topic.queue.noti_web Error {DateTime.Now}  Exception  {message.Message}  {message.CreatedDate}");
+                   Console.WriteLine($"mobile {Constant.FanoutExchangeName} {DateTime.Now} => {message.Message}  {message.CreatedDate}");
+               }, cancellationToken);
         }
 
         private async Task ConsumerAsync<T>(string queueName
@@ -133,18 +185,12 @@ namespace Ptncafe.ConsoleApp.Test.RabbitMq
                catch (Exception ex)
                {
                    _logger.LogError($"Process Error {DateTime.Now} => {basicDeliverEventArgs.Body} {DateTime.Now} {ex}");
-                   channel.BasicReject(basicDeliverEventArgs.DeliveryTag,  true);
+                   channel.BasicReject(basicDeliverEventArgs.DeliveryTag, true);
                }
            };
             channel.BasicQos(0, prefetchCount, false);
             channel.BasicConsume(queue: queueName, consumer: consumer);
             _channels.Add(channel);
-        }
-
-        private Task<bool> Process(string message)
-        {
-            _logger.LogDebug($"Process {message} {DateTime.Now}");
-            return Task.FromResult(true);
         }
 
         public void Dispose()

@@ -8,10 +8,19 @@
         public static readonly string FanoutExchangeName = "demo.test.fanout";
         public static readonly string DirectExchangeName = "demo.test.direct";
 
+        #region Topic
         public static readonly string Topic_Noti_Order_Publish_RoutingKey = "demo.test.topic.order.noti";
         public static readonly string Topic_Noti_Product_Publish_RoutingKey = "demo.test.topic.product.noti";
 
 
         public static readonly string Topic_Noti_Queue_RoutingKey = "demo.test.topic.*.noti";
+        #endregion
+
+        #region Fanout
+        public static readonly string Fanout_Noti_Queue_RoutingKey = "demo.test.fanout.noti";
+        #endregion
+        #region Direct
+        public static readonly string Fanout_Noti_Queue_RoutingKey = "demo.test.fanout.noti";
+        #endregion
     }
 }

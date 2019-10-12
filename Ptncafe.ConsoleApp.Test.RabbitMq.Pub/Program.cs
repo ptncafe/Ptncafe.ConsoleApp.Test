@@ -37,7 +37,12 @@ namespace Ptncafe.ConsoleApp.Test.RabbitMq
                 case "topic":
                     Topic(messagesLength);
                     break;
-
+                case "fanout":
+                    Fanout(messagesLength);
+                    break;
+                case "direct":
+                    Direct(messagesLength);
+                    break;
                 default:
                     break;
             }
@@ -75,6 +80,51 @@ namespace Ptncafe.ConsoleApp.Test.RabbitMq
 
 
                     Console.WriteLine($"BasicPublish {DateTime.Now} => {Constant.TopicExchangeName}  {0}", i);
+                }
+            }
+        }
+
+        private static void Fanout(int messagesLength)
+        {
+            var factory = new ConnectionFactory() { Uri = new Uri(_rabbitMqConnectionString) };
+            using (var connection = factory.CreateConnection())
+            using (var channel = connection.CreateModel())
+            {
+                for (int i = 0; i < messagesLength; i++)
+                {
+                    var randomString = RandomString(8);
+                    channel.BasicPublish(exchange: Constant.FanoutExchangeName,
+                                         routingKey: string.Empty,
+                                         basicProperties: null,
+                                         body: Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new MesssageDto
+                                         {
+                                             CreatedDate = DateTime.Now,
+                                             Message = $"Message test {Constant.FanoutExchangeName} {randomString} {DateTime.Now}"
+                                         })));
+
+                    Console.WriteLine($"BasicPublish {DateTime.Now} => {Constant.FanoutExchangeName}  {0}", i);
+                }
+            }
+        }
+        private static void Direct(int messagesLength)
+        {
+            var factory = new ConnectionFactory() { Uri = new Uri(_rabbitMqConnectionString) };
+            using (var connection = factory.CreateConnection())
+            using (var channel = connection.CreateModel())
+            {
+                for (int i = 0; i < messagesLength; i++)
+                {
+                    var randomString = RandomString(8);
+                    channel.BasicPublish(exchange: Constant.DirectExchangeName,
+                                         routingKey: string.Empty,
+                                         basicProperties: null,
+                                         body: Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new MesssageDto
+                                         {
+                                             CreatedDate = DateTime.Now,
+                                             Message = $"Message test {Constant.DirectExchangeName} {randomString} {DateTime.Now}"
+                                         })));
+
+                    Console.WriteLine($"BasicPublish {DateTime.Now} => {Constant.DirectExchangeName}  {0}", i);
                 }
             }
         }
