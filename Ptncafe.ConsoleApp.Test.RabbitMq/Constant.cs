@@ -20,7 +20,9 @@
         public static readonly string Fanout_Noti_Queue_RoutingKey = "demo.test.fanout.noti";
         #endregion
         #region Direct
-        public static readonly string Fanout_Noti_Queue_RoutingKey = "demo.test.fanout.noti";
+        public static readonly string Direct_Noti_Web_Queue_RoutingKey = "demo.test.direct.noti.web";
+        public static readonly string Direct_Noti_Mobile_Queue_RoutingKey = "demo.test.direct.noti.mobile";
+
         #endregion
     }
 }

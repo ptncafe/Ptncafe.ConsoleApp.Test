@@ -43,6 +43,7 @@ namespace Ptncafe.ConsoleApp.Test.RabbitMq
 
             await TopicQueue(cancellationToken);
             await FanoutQueue(cancellationToken);
+            await DirectQueue(cancellationToken);
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
@@ -136,26 +137,26 @@ namespace Ptncafe.ConsoleApp.Test.RabbitMq
         }
         private async Task DirectQueue(CancellationToken cancellationToken)
         {
-            await ConsumerAsync<MesssageDto>(queueName: "demo.test.fanout.queue.noti.web"
+            await ConsumerAsync<MesssageDto>(queueName: "demo.test.direct.queue.noti.web"
                , exchangeName: Constant.DirectExchangeName
-               , routingKey: string.Empty
+               , routingKey: Constant.Direct_Noti_Web_Queue_RoutingKey
                , prefetchCount: 1
                , (message) =>
                {
                    Thread.Sleep(2000);
                    //throw new Exception($"demo.test.topic.queue.noti_web Error {DateTime.Now}  Exception  {message.Message}  {message.CreatedDate}");
-                   Console.WriteLine($"web {Constant.FanoutExchangeName} {DateTime.Now} => {message.Message}  {message.CreatedDate}");
+                   Console.WriteLine($"web {Constant.Direct_Noti_Web_Queue_RoutingKey} {DateTime.Now} => {message.Message}  {message.CreatedDate}");
                }, cancellationToken);
 
-            await ConsumerAsync<MesssageDto>(queueName: "demo.test.fanout.queue.noti.mobile"
+            await ConsumerAsync<MesssageDto>(queueName: "demo.test.direct.queue.noti.mobile"
                , exchangeName: Constant.DirectExchangeName
-               , routingKey: string.Empty
+               , routingKey: Constant.Direct_Noti_Mobile_Queue_RoutingKey
                , prefetchCount: 1
                , (message) =>
                {
                    Thread.Sleep(1000);
                    //throw new Exception($"demo.test.topic.queue.noti_web Error {DateTime.Now}  Exception  {message.Message}  {message.CreatedDate}");
-                   Console.WriteLine($"mobile {Constant.FanoutExchangeName} {DateTime.Now} => {message.Message}  {message.CreatedDate}");
+                   Console.WriteLine($"mobile {Constant.Direct_Noti_Mobile_Queue_RoutingKey} {DateTime.Now} => {message.Message}  {message.CreatedDate}");
                }, cancellationToken);
         }
 

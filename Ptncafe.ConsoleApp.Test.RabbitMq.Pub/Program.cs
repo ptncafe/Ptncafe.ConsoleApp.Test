@@ -116,14 +116,21 @@ namespace Ptncafe.ConsoleApp.Test.RabbitMq
                 {
                     var randomString = RandomString(8);
                     channel.BasicPublish(exchange: Constant.DirectExchangeName,
-                                         routingKey: string.Empty,
+                                         routingKey: Constant.Direct_Noti_Web_Queue_RoutingKey,
                                          basicProperties: null,
                                          body: Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new MesssageDto
                                          {
                                              CreatedDate = DateTime.Now,
-                                             Message = $"Message test {Constant.DirectExchangeName} {randomString} {DateTime.Now}"
+                                             Message = $"Message test {Constant.Direct_Noti_Web_Queue_RoutingKey} {randomString} {DateTime.Now}"
                                          })));
-
+                    channel.BasicPublish(exchange: Constant.DirectExchangeName,
+                                        routingKey: Constant.Direct_Noti_Mobile_Queue_RoutingKey,
+                                        basicProperties: null,
+                                        body: Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new MesssageDto
+                                        {
+                                            CreatedDate = DateTime.Now,
+                                            Message = $"Message test {Constant.Direct_Noti_Mobile_Queue_RoutingKey} {randomString} {DateTime.Now}"
+                                        })));
                     Console.WriteLine($"BasicPublish {DateTime.Now} => {Constant.DirectExchangeName}  {0}", i);
                 }
             }
